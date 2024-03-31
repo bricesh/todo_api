@@ -1,11 +1,11 @@
 #import json
 from flask import Flask, jsonify#, request
-import chromadb
+#import chromadb
 
 CHROMA_DATA_PATH = "chroma_data/"
-client = chromadb.PersistentClient(path=CHROMA_DATA_PATH)
+#client = chromadb.PersistentClient(path=CHROMA_DATA_PATH)
 
-collection = client.get_collection("tasks_for_embedding")
+#collection = client.get_collection("tasks_for_embedding")
 
 app = Flask(__name__)
 
@@ -17,17 +17,17 @@ app = Flask(__name__)
 #
 #nextEmployeeId = 4
 
-def predict_project(task):
-    closest_task = collection.query(
-        query_texts=[task],
-        n_results=1
-    )
-    return closest_task.get('metadatas')[0][0]['project'] if closest_task.get('distances')[0][0] < 0.6 else 'UNKNOWN'
+#def predict_project(task):
+#    closest_task = collection.query(
+#        query_texts=[task],
+#        n_results=1
+#    )
+#    return closest_task.get('metadatas')[0][0]['project'] if closest_task.get('distances')[0][0] < 0.6 else 'UNKNOWN'
 
 @app.route('/project/<task>', methods=['GET'])
 def get_project_by_text (task):
-    project = predict_project(task)
-    return jsonify(project)
+    #project = predict_project(task)
+    return jsonify(task)
 
 #@app.route('/employees', methods=['GET'])
 #def get_employees():
