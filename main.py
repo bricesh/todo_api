@@ -27,7 +27,7 @@ def predict_project(task):
 @app.route('/project/<task>', methods=['GET'])
 def get_project_by_text (task):
     project = predict_project(task)
-    return jsonify(task)
+    return jsonify(project)
 
 #@app.route('/employees', methods=['GET'])
 #def get_employees():
