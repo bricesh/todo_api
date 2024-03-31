@@ -1,11 +1,11 @@
 #import json
 from flask import Flask, jsonify#, request
-#import chromadb
+import chromadb
 
 CHROMA_DATA_PATH = "chroma_data/"
-#client = chromadb.PersistentClient(path=CHROMA_DATA_PATH)
+client = chromadb.PersistentClient(path=CHROMA_DATA_PATH)
 
-#collection = client.get_collection("tasks_for_embedding")
+collection = client.get_collection("tasks_for_embedding")
 
 app = Flask(__name__)
 
