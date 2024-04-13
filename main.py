@@ -9,25 +9,27 @@ collection = client.get_collection("tasks_for_embedding")
 
 app = Flask(__name__)
 
-#employees = [
-# { 'id': 1, 'name': 'Ashley' },
-# { 'id': 2, 'name': 'Kate' },
-# { 'id': 3, 'name': 'Joe' }
-#]
-#
-#nextEmployeeId = 4
+def most_frequent(List):
+    return max(set(List), key = List.count)
 
-def predict_project(task):
+def predict_project(task_desc):
     closest_task = collection.query(
-        query_texts=[task],
-        n_results=1
+        query_texts=[task_desc],
+        n_results=5,
+        # where={"metadata_field": "is_equal_to_this"}, # optional filter
+        # where_document={"$contains":"search_string"}  # optional filter
     )
-    return closest_task.get('metadatas')[0][0]['project'] if closest_task.get('distances')[0][0] < 0.6 else 'UNKNOWN'
+    if closest_task.get('distances')[0][0] < .3:
+        return closest_task.get('metadatas')[0][0]
+    elif closest_task.get('distances')[0][0] > .6:
+        return {'project': 'OTHER'}
+    else:
+        return {'project': most_frequent([pr.get('project')for pr in closest_task.get('metadatas')[0]])}
 
 @app.route('/project/<task>', methods=['GET'])
 def get_project_by_text (task):
     project = predict_project(task)
-    return jsonify(project)
+    return jsonify(project), 200
 
 #@app.route('/employees', methods=['GET'])
 #def get_employees():
